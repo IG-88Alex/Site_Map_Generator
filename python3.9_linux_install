@@ -1,0 +1,89 @@
+#!/bin/bash
+
+#python3.9_linux_install script is based on the bash command shell,
+#and is intended for automated installation of python 3.9, as well as the Sitemap Generator tool itself.
+
+#(python3.9_linux_install script was tested on Ubuntu 20.04.1 LTS.)
+
+#You need to run this script using the [sudo] command, otherwise nothing will work. !!!
+
+echo -e "\n\n"
+
+apt update && apt upgrade -y
+
+apt install git
+####
+echo -e "\n"
+
+read -n 1 -p "Would you like to install python 3.9 ?[Y/n]:" answer
+
+echo -e "\n"
+
+yes="y"
+
+no="n"
+
+if [ "${answer,,}" == "$yes" ]
+####
+then
+
+apt install build-essential checkinstall 
+	
+apt install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+
+apt install python3-tk
+
+cd /opt 
+
+wget https://github.com/python/cpython/archive/v3.9.1rc1.tar.gz
+
+tar xzf v3.9.1rc1.tar.gz
+
+cd cpython-3.9.1rc1
+
+./configure --enable-optimizations
+
+make altinstall
+
+cd /opt
+
+rm -f v3.9.1rc1.tar.gz
+
+py_version=$(python3.9 -V)
+
+echo -e "\n\nPython 3.9 version installed successfully: \033[38;5;46m$py_version ↓\033[0m\n\n"
+
+echo -e "\033[38;5;46m       __
+      {0O}
+      \__/
+      /^/
+     ( (   
+     \_\_____
+     (_______)
+    (_________()Oo\033[0m\n"
+    
+path_pip=`which python3.9`
+
+$path_pip -m pip install --upgrade pip
+
+python3.9 -m pip install git+https://github.com/IG-88a-lex/Site_Map_Generator
+
+map
+####
+elif [ "${answer,,}" == "$no" ]
+
+then
+
+apt install git
+
+apt install python3-pip
+
+path_pip3=`which python3`
+
+$path_pip3 -m pip install --upgrade pip
+
+python3 -m pip install git+https://github.com/IG-88a-lex/Site_Map_Generator
+
+map
+
+fi
