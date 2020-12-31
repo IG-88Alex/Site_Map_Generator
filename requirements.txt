@@ -1,0 +1,16 @@
+lxml
+aiohttp
+asyncio
+aiofile
+aiofiles
+bs4
+beautifulsoup4
+networkx
+numpy
+matplotlib
+requests
+beautifulsoup4
+aiohttp
+elapsed
+elapsedtimer
+prettytable
