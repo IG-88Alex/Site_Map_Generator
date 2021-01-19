@@ -1,31 +1,48 @@
-import requests
 import sys
 import re, os
+import requests
+import platform
+import itertools
 import tkinter as tk
 from tkinter import filedialog
 from itertools import chain, combinations
 from urllib.parse import urlparse
 from urllib.parse import unquote, unquote_plus
 
+
 def Input(): 
 
 	try:
 
+		#The data that the user entered.
+		VALUE=str(
 
-		VALUE=str(input('\n\n\033[38;5;51mEnter your url \033[38;5;46m>\033[38;5;226m  ')) #--------Data entry
+			input('\n\n\033[38;5;51mEnter your url \033[38;5;46m>\033[38;5;226m  ')
 
+			)
+
+		#Returns the console text color to the original default.
 		print('\033[0m')
 
-		List_params_1= re.split(r'(\s+)',VALUE) 
+		'''Splits a string by spaces, forming a list based on the data entered by the user.
+		
+		Example:
+		Enter your url > https://www.google.com/ C:/Users/Administrator/Desktop -g
+		List_params_1 = ['https://www.google.com/', 'C:/Users/Administrator/Desktop', '-g']'''
+		List_params_1= re.findall(r'(\S+)',VALUE)
 
-		URL = None
+		#List for proving that there are no more than 1 links.
+		Proof = []
 
-		Proof = [] # List for proving that there are no more than 1 links.
+		#Selecting links using a regular expression.
+		for url in List_params_1:
 
+			'''Checks whether the link domain name consists of only Latin letters.'''
+			list_url = re.findall(
 
-		for url in List_params_1:#Selecting links using a regular expression.
+				r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url
 
-			list_url = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',url)
+				)
 
 			if bool(list_url):
 
@@ -33,203 +50,101 @@ def Input():
 
 				URL = url
 
+		'''Permutation with url and element for later use in the mechanism.'''
 
-		if len(Proof) == 1:# Permutation with url and element
-						   # for later use in the mechanism.
+		#if bool(url) = True
+		if len(Proof) == 1:
+
+			#List_params_1 = [elem,...,url] → permutation ←  [url,...,elem] ¬ [url,...,elem]
 			List_params_1[List_params_1.index(URL) ],List_params_1[0] = List_params_1[0],List_params_1[List_params_1.index(URL)]
 
+		#if bool(url) = False
 		if len(Proof) != 1:
 
-			print('\n\033[38;5;196mInvalid data entered.\033[0m')
+			print('\n\033[38;5;196mInvalid data entered._129\
+				\nThe link contains invalid characters.\033[0m')
 
 			sys.exit(0)
 
+		#Getting_the_root_URL.
+		Base_URL= str('{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(List_params_1[0])))
 
-		Base_URL= str('{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(List_params_1[0])))#Getting_the_root_URL.
+		#Main dictionary.
+		Dict_values = {}
 
-		response = requests.head(List_params_1[0]) #Request to check the validity of the link.
+		'''Checking for a backslash at the end of the root url.'''
+		if re.findall(r'..$',Base_URL)[0][0] != '\\':
 
-		Dict_values = {}#Main dictionary.
+			'''Checks whether there are errors in the protocol and in the domain name url.
+			   If there is an error, then the transition to an exception will occur:
+				
+				Example:
 
-
-		if re.findall(r'..$',Base_URL)[0][0] != '\\' and re.findall(r'..$',Base_URL)[0][1] != '\\' and response.status_code != 404 :#Checking for a backslash
-																																	#at the end of the root url.
-			Dict_values['url'] = Base_URL																									
+			   ┌─requests.header('https://www.bullshit.com')
+			   │
+			   └─>except:(socket.gaierror,urllib3.exceptions.NewConnectionError,urllib3.exceptions.MaxRetryError....)
+				.........'''
+			if requests.head(Base_URL):																									
+				
+				Dict_values['url'] = Base_URL																									
 
 		else:
 
-			print('\n\033[38;5;196mYou may have used at the end of the root url \033[37m[\033[38;5;196m\\\033[37m]\033[38;5;196m instead \033[37m[\033[38;5;46m/\033[37m]\033[38;5;196m.\033[0m')
-
-			print('\n\033[38;5;196mThis page may not exist <Response [404]>.\033[0m')
+			print('\n\033[38;5;196mMost likely, this page does not exist.\033[0m')
 
 			sys.exit(0)
 
+		'''Searches for and also checks for validity, 
+		   the path to the directory that the user specified.'''
+		for subset in List_params_1:
 
+			if os.path.isdir(subset):
 
-		Dict_values['Path'] = None
+				if re.findall(
 
-		Path = [] # List to add found directories.
+					r'^[A-Z]:/[^\//:?"<>|\r\n].+[^\\:?"/<>|\r\n]+/?$|^[A-Z]:\\[^\//:?"<>|\r\n].+[^\\:?"/<>|\r\n]+\\?$',subset
 
-		Del_Path_combination = [] 
+					) and 'Windows' in str(platform.platform()) or 'Windows' not in str(platform.platform()) and re.findall(
 
-																														#       Lists_combinations
-							                                                                                            #---------------------------------
-		All_combinations = chain(*map(lambda x: combinations(List_params_1[1:], x), range(0, len(List_params_1[1:])+1)))# All possible combinations of data
-																													    # entered by the user to
-																													    # check for the directory name.
+					r'^/[^/].+[^/]/?$|^\\[^\\].+[^\\]\\?$',subset):
 
-		for subset in All_combinations:		
-
-			A = ''.join(subset) #Convert each combination as a list back to a 
-								#readable string to find the directory.
-
-			if os.path.isdir(A) and A[-1] != ' ' and A not in Path:
-
-				Path.append(A)
-
-				Del_Path_combination.append(subset) # Append_to_list_elements_for_next_deleted.
-
-
-		if len(Path) == 1:# If there are no more than two directories,
-						  # add them to the dictionary.
-
-			if re.findall(r'..$',Path[0])[0] != '//' and re.findall(r'..$',Path[0])[0] != '\\\\' and \
-			re.findall(r'..$',Path[0])[0] != '/\\' and re.findall(r'..$',Path[0])[0] != '\\/':
-
-				Dict_values['Path'] = Path[0].replace('\\', '/')
-
-				for i in Del_Path_combination[0]:
-
-					List_params_1.remove(i)
-
-
-
-		elif len(Path) > 1: # If there is more than one directory,
-							# you will get an error.
-
-
-			print('\n\033[38;5;196mInvalid data entered.\033[0m')
-
-			print('\n\033[38;5;196mYou may have entered the names of two directories.\033[0m')
-
-			sys.exit(0)
-
-		
-
-		List_params_1.remove(str(List_params_1[0])) # Remove the found link from the list of entered data.
-
-		List_prms = list(List_params_1)
-
-		[List_prms.remove(i) for i in List_params_1 if i.isspace() or i == '']
-
-
+					Dict_values['Path'] = subset.replace('\\', '/')
 
 		#----------------------------------------------------------------------------
-
-
-		if len(List_prms) == 1 and bool(List_prms) and List_prms[0] == '-g':
+		if '-g' in List_params_1:
 
 			Dict_values['-g'] = 'graph'
 
-			List_prms.remove('-g')
-
-
-
-		if len(List_prms) == 1 and bool(List_prms) and '-p' in List_prms and Dict_values['Path'] == None:
+		#A graphical window for selecting a folder.
+		if '-p' in List_params_1 and 'Path' not in Dict_values:
 
 			root = tk.Tk()
 
-			root.update()#################
+			root.update()
 
 			root.withdraw()
 
 			directory_path = filedialog.askdirectory()
 
-			root.quit()########################################
+			root.quit()
 
-			root.destroy()#############################################################
-
-			
+			root.destroy()
 
 			if directory_path!= '' and not directory_path.isspace() and bool(directory_path) != False:
 
 				Dict_values['Path'] = directory_path.replace('\\', '/')
 
-
-			List_prms.remove('-p')
-
-
-
-		if len(List_prms) == 1 and List_prms[0] == '-p' and Dict_values['Path'] != None:
-
-			print('\n\033[38;5;196mInvalid data entered.\033[0m')
-
-			print("\n\033[38;5;196mYou can't simultaneously call the graphical window dialog \033[38;5;51mWindows \
-				Explorer\033[38;5;196m (\033[38;5;46m-p\033[38;5;196m) and write the directory name.\n\033[0m")
+		#----------------------------------------------------------------------------
+		List_commands=[i for i in Dict_values]
 
 
+		if len(List_commands) == len(List_params_1) or len(List_commands) == 1 and len(List_params_1)==1:
 
-		if len(List_prms) == 2 and '-p' in List_prms and '-g' in List_prms and Dict_values['Path'] == None:
+			return Dict_values
 
+		else:
 
-			Dict_values['-g'] = 'graph'
-
-			List_prms.remove('-g')
-
-			List_prms.remove('-p')
-
-			root = tk.Tk()
-
-			root.update()#################
-
-			root.withdraw()
-
-			directory_path = filedialog.askdirectory()
-
-			root.quit()########################################
-
-			root.destroy()#############################################################
-
-
-			if directory_path!= '' and not directory_path.isspace() and bool(directory_path) != False:
-
-				Dict_values['Path'] = directory_path.replace('\\', '/')
-
-
-
-		elif len(List_prms) == 2 and '-p' in List_prms and '-g' in List_prms and Dict_values['Path'] != None:
-
-
-			print('\n\033[38;5;196mInvalid data entered.\033[0m')
-
-			print("\n\033[38;5;196mYou can't simultaneously call the graphical window dialog \033[38;5;51mWindows \
-				Explorer\033[38;5;196m (\033[38;5;46m-p\033[38;5;196m) and write the directory name.\n\033[0m")
-
-			sys.exit(0)
-
-		
-
-
-
-		if len(List_prms) >= 1 and Dict_values['Path'] == None: 
-
-			print('\n\033[38;5;196mInvalid data entered.\033[0m')
-
-			sys.exit(0)
-
-
-
-		if len(List_prms) >= 1 and Dict_values['Path'] != None and '-p' not in List_prms:
-
-			print('\n\033[38;5;196mInvalid data entered.\033[0m')
-
-			sys.exit(0)
-
-
-
-		if len(List_prms) == 0: # Main___save_dict__in__Input()
-
-			return Dict_values  
+			print('\033[38;5;196mData entered incorrectly.\033[0m')  
 
 
 
@@ -247,8 +162,12 @@ def Input():
 		sys.exit(0)
 
 
-	except:
 
-		print('\n\033[38;5;196mInvalid data entered.\033[0m')
 
-		sys.exit(0)
+if __name__ == '__main__':
+
+	import Welcome
+
+	Welcome.Welcome()
+
+	dic_t = Input()
