@@ -134,7 +134,7 @@ def Input():
 
 				Dict_values['Path'] = directory_path.replace('\\', '/')
 
-		#----------------------------------------------------------------------------
+		#List of commands entered by the user.
 		List_commands=[i for i in Dict_values]
 
 
@@ -145,7 +145,6 @@ def Input():
 		else:
 
 			print('\033[38;5;196mData entered incorrectly.\033[0m')  
-
 
 
 	except KeyboardInterrupt:
@@ -160,8 +159,6 @@ def Input():
 	except SystemExit:
 
 		sys.exit(0)
-
-
 
 
 if __name__ == '__main__':
