@@ -66,13 +66,7 @@ class Search:
 		# This list is intended for storing valid links.
 		self.Succes_link=[]
 
-		'''
-		This list is intended for storing 
-		links pointing to a document. '''
-		self.Lis_doc_file=[]
-
-		# This list is intended for storing valid links.
-		self.Succes_doc_link=[]
+		self.Lis_tuples=[]
 
 		'''
 		The URL that we pass to the scraper.'''
@@ -140,120 +134,135 @@ class Search:
 
 	'''
 	The main function of finding new links.'''
-	async def searching_links(self,url):
+	async def searching_links(self,tupl):
 
 		async with aiohttp.ClientSession(headers={'Connection': 'keep-alive'}) as session:
 
-			url = await url.get()
-			 
-			async with session.get(url,ssl=self.sslcontext) as response:
+			tupl = await tupl.get()
 
-				for date in self.Header_date:
+			url=tupl[0]
 
-					if date in response.headers:
+			type_of_request=tupl[1]
 
-						self.Last_mod = response.headers[date]
+			requesters={
+						'get':session.get ,
+						'head':session.head ,
+						}
+
+			requester=requesters[type_of_request]
+
+			async with requester(url,ssl=self.sslcontext) as response:
+
+				await self.html_analysis(url,type_of_request,response)
+
+
+	async def html_analysis(self,url,type_url,response):
+
+		if Search.__counter < 45000:
+
+			'''
+			List of pages selected from the link.
+			The generator allows you not only to create a 
+			list of pages, but also to remove empty None lines from this list.
+			
+			https://www.example.com/page1/page2/page3(/)... => ['page1', 'page2', 'page3']'''
+			pages=urlparse(url).path.strip('/').split('/')
+
+			self.Last_mod=datetime.now().__format__("%a, %d %b %Y %H:%M:%S GMT")
+			#=datetime.now().isoformat()[:-7]+'+00:00'			
+
+			for date in self.Header_date:
+
+				if date in response.headers:
+
+					self.Last_mod = response.headers[date]
+
+
+			if response.status==200 and url not in self.Succes_link and type_url=='get' \
+			or url not in self.Succes_link and type_url=='head':
+
+				# HTML-code, server response to the get-request.
+				self.Text = await response.text()
+
+				if url != self.Base_URL and url != self.Base_URL[:-1] and url not in self.Succes_link:
+
+					if pages:
+						# The priority of this link, its rank..
+						self.Priority=self.len_pages_rank[int(len(pages))]
+
+					self.Contain_rank[self.Priority].append( (url, self.Last_mod, self.Priority) )
+
+					self.Succes_link.append(url)
+
+					Search.__counter+=1
+
+					Len=len(str(Search.__counter))
+
+					# self.mult - multiplier
+					if Len==1:
+						self.mult=self.mult*1
+
+					if Len > len(str(Search.__counter - 1)):
+						self.mult=self.mult+1
+
+					Search.Log_info(Search.__counter, self.mult, url)
+
+				# Checks if the main base link is not in the list.
+				if len(self.Lis_foun_lin) == 1 and self.Lis_foun_lin[0] == (self.Base_URL,'get'):
+
+					self.Contain_rank['1.00'].append( (url, self.Last_mod, '1.00') )
+
+					Search.Log_info(Search.__counter, self.mult, self.Base_URL)
 
 				'''
-	    		List of pages selected from the link.
-	    		The generator allows you not only to create a 
-	    		list of pages, but also to remove empty None lines from this list.
-				
-	    		https://www.example.com/page1/page2/page3(/)... => ['page1', 'page2', 'page3']'''
-				pages=urlparse(url).path.strip('/').split('/')
+				For each found link found by BeautifulSoup, do the following....'''
+				for link in [i['href'] for i in BS(self.Text,'lxml').find_all('a',href=True)]:
 
-				if Search.__counter < 45000:
+					link=unquote(unquote(link))
+					
+					doc=Search.Document_ext(
 
-					if response.status == 200 and url not in self.Succes_link:
+						self.Base_URL, link,
+						self.Header_date,
+						self.len_pages_rank,
 
-						# HTML-code, server response to the get-request.
-						self.Text = await response.text()
+						)# self.Succes_doc_link.append((url,Last_mod,Priority))
 
-						#print(self.Text)
+					if doc and doc not in self.Lis_foun_lin:
 
-						if url != self.Base_URL and url != self.Base_URL[:-1] and url not in self.Succes_link:
+						Search.__counter+=1
 
-							if pages:
-								# The priority of this link, its rank..
-								self.Priority=self.len_pages_rank[int(len(pages))]
+						Len=len( str(Search.__counter) )
 
-							self.Contain_rank[self.Priority].append( (url, self.Last_mod, self.Priority) )
+						# self.mult - multiplier
+						if Len==1:
+							self.mult=self.mult*1
 
-							self.Succes_link.append(url)
+						if Len > len(str(Search.__counter - 1)):
+							self.mult=self.mult+1
 
-							Search.__counter+=1
+						self.Lis_foun_lin.append((doc,'head'))
+					
+					
+					'''
+					2.The first condition is to search for a link based on a given pattern. 
+					http(s)://...(.)example.com/.....'''
+					url = Search.Exist_https(self.Base_URL,link)
 
-							Len=len(str(Search.__counter))
+					if url and not doc:
 
-							# self.mult - multiplier
-							if Len==1:
-								self.mult=self.mult*1
+						if (url,'get') not in self.Lis_foun_lin:
 
-							if Len > len(str(Search.__counter - 1)):
-								self.mult=self.mult+1
-
-							Search.Log_info(Search.__counter, self.mult, url)
-
-						# Checks if the main base link is not in the list.
-						if len(self.Lis_foun_lin) == 1 and self.Lis_foun_lin[0] == self.Base_URL:
-
-							self.Contain_rank['1.00'].append( (url, self.Last_mod, '1.00') )
-
-							Search.Log_info(Search.__counter, self.mult, self.Base_URL)
-
-						'''
-						For each found link found by BeautifulSoup, do the following....'''
-						for link in [i['href'] for i in BS(self.Text,'lxml').find_all('a',href=True)]:
-
-							link=unquote(unquote(link))
-
-							#print(link)
-							
-							doc=Search.Document_ext(
-
-								self.Base_URL, link,
-								self.Header_date,
-								self.len_pages_rank,
-								self.Lis_doc_file,
-								self.Succes_doc_link
-
-								)# self.Succes_doc_link.append((url,Last_mod,Priority))
-
-							if doc:
-
-								Search.__counter+=1
-
-								Len=len( str(Search.__counter) )
-
-								# self.mult - multiplier
-								if Len==1:
-									self.mult=self.mult*1
-
-								if Len > len(str(Search.__counter - 1)):
-									self.mult=self.mult+1
-
-								Search.Log_info(Search.__counter, self.mult, doc)
-							
-							
-							'''
-							2.The first condition is to search for a link based on a given pattern. 
-							http(s)://...(.)example.com/.....'''
-							url = Search.Exist_https(self.Base_URL,link)
-
-							if url and not doc:
-
-								if url not in self.Lis_foun_lin:
-
-									self.Lis_foun_lin.append(url)
+							self.Lis_foun_lin.append((url,'get'))
 
 
-				elif Search.__counter > 45000:
+			elif Search.__counter > 45000:
 
-					self.Create_Sitemap()
+				self.Create_Sitemap()
 
-					self.Map.Site_map_close()
+				self.Map.Site_map_close()
 
-					sys.exit(0)
+				sys.exit(0)
 
 
 	# The Create_Sitemap method creates a site map.
@@ -262,8 +271,6 @@ class Search:
 		'''
 		Generates a single list based on the lists of the dictionary self.Contain_rank{}'''
 		self.All_links=[n for inner in [self.Contain_rank[i] for i in self.Contain_rank] for n in inner]
-
-		self.All_links=self.All_links+self.Succes_doc_link
 
 		for i in self.All_links:
 
