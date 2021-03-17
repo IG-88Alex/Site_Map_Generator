@@ -50,7 +50,7 @@
 
 			   - (enter)           cmd 
 
-			   - (in cmd enter)    pip3 install git+https://github.com/IG-88a-lex/Site_Map_Generator
+			   - (in cmd enter)    pip3 install git+https://github.com/IG-88Alex/Site_Map_Generator
 
 <br> </br>
 
