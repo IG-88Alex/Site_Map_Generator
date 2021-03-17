@@ -77,7 +77,7 @@ class Get_File_Map:
 
     Date = datetime.datetime.strptime(Last_mod, "%a, %d %b %Y %H:%M:%S GMT")
 
-    Last_mod = f'{Date.replace().isoformat()}"+00:00"'
+    Last_mod = f'{Date.replace().isoformat()}+00:00'
 
     #Let's write to the file.
     tree_xml =f"\n    <url>\
