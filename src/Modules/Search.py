@@ -66,8 +66,6 @@ class Search:
 		# This list is intended for storing valid links.
 		self.Succes_link=[]
 
-		self.Lis_tuples=[]
-
 		'''
 		The URL that we pass to the scraper.'''
 		self.URL=URL
@@ -228,7 +226,7 @@ class Search:
 
 						)# self.Succes_doc_link.append((url,Last_mod,Priority))
 
-					if doc and doc not in self.Lis_foun_lin:
+					if doc and (doc,'head') not in self.Lis_foun_lin:
 
 						Search.__counter+=1
 
