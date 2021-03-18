@@ -48,7 +48,7 @@ def main(modules):
 
 	obj1=Search(URL,Path_directory)
 
-	obj1.Lis_foun_lin.append(obj1.Base_URL)
+	obj1.Lis_foun_lin.append((obj1.Base_URL,'get'))
 
 	# The main branch of the program.
 	async def run_coroutines():
