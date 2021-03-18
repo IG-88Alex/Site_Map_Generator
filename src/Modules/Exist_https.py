@@ -105,8 +105,8 @@ def Exist_https(Base_URL,url):
 The function is written to analyze references 
 to the presence of valid document extensions.
 
-'''
-def Document_ext(Base_URL,url,Header_date,len_pages_rank,List,Succes_List):
+''' #List,Succes_List
+def Document_ext(Base_URL,url,Header_date,len_pages_rank,):
 
 	'''
 
@@ -136,29 +136,7 @@ def Document_ext(Base_URL,url,Header_date,len_pages_rank,List,Succes_List):
 
 				truth = True if True in [True for i in extensions if res==i] else False
 
-				if truth and url not in List:
-
-					response=requests.head(url,headers={'Connection': 'keep-alive'})
-
-					headers=response.headers
-
-					pages=urlparse(url).path.strip('/').split('/')
-
-					# The priority of this link, its rank..
-					Priority=len_pages_rank[int(len(pages))]
-
-					Last_mod=datetime.now().__format__("%a, %d %b %Y %H:%M:%S GMT")
-					#=datetime.now().isoformat()[:-7]+'+00:00'
-
-					for date in Header_date:
-
-						if date in headers:
-
-							Last_mod = headers[date]
-
-					Succes_List.append((url,Last_mod,Priority))
-
-					List.append(url)
+				if truth:
 
 					return url
 
