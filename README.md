@@ -30,7 +30,7 @@
 
 [Download](https://www.python.org/downloads/) the installer from the official website and run it. Make sure that you check the box when installing:
 
-![](https://github.com/IG-88a-lex/Images/blob/master/Add_Path.png)
+![](https://github.com/IG-88Alex/Images/blob/master/Add_Path.png)
 
 ### __Instalation Site_Map_Generator.__
 
