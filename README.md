@@ -90,7 +90,7 @@
 #### Open a terminal (Ubuntu: Ctrl + Alt + T) and enter the following commands:
 
 <pre><b>
-wget https://raw.githubusercontent.com/IG-88a-lex/Site_Map_Generator/main/python3.9_linux_install
+wget https://raw.githubusercontent.com/IG-88Alex/Site_Map_Generator/main/python3.9_linux_install
 
 chmod +sx ./python3.9_linux_install
 
