@@ -146,7 +146,7 @@ map
  ### Instalation Site_Map_Generator.
 _If you have a python 3 version (python3 -V) at least >= 3.8 installed enter the following command:_
 	
-	                 python3 -m pip install git+https://github.com/IG-88a-lex/Site_Map_Generator
+	                 python3 -m pip install git+https://github.com/IG-88Alex/Site_Map_Generator
 
 
 <br> </br>
