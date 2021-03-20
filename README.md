@@ -9,10 +9,6 @@
 
 <h2><i>🐍Installation.</i></h2>
 
-
-
-<br> </br>
-
 ### __Instalation Python 3.9 (3.8) 🐍__
 
 <h3 align = "left"> 🗗 For Windows:</h3>
