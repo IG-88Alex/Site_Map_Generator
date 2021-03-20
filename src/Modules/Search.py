@@ -21,8 +21,7 @@ from urllib.parse import unquote, unquote_plus
 
 class Search:
 
-	'''
-	Importing Get_File_Map'''
+
 	path_module_1=str(Path(__file__).parent)+'/Import_Module.py'
 
 	module_spec_1 = importlib.util.spec_from_file_location(
