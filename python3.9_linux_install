@@ -66,7 +66,7 @@ path_pip=`which python3.9`
 
 $path_pip -m pip install --upgrade pip
 
-python3.9 -m pip install git+https://github.com/IG-88a-lex/Site_Map_Generator
+python3.9 -m pip install git+https://github.com/IG-88Alex/Site_Map_Generator
 
 map
 ####
