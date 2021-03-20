@@ -138,7 +138,7 @@ cd /opt
 
 rm -f v3.9.1rc1.tar.gz
 
-python3.9 -m pip install git+https://github.com/IG-88a-lex/Site_Map_Generator
+python3.9 -m pip install git+https://github.com/IG-88Alex/Site_Map_Generator
 
 map
 </b></pre>
