@@ -117,7 +117,7 @@ sudo apt install wget
 
  #### 2.2. [Go to the official python repository on Github](https://github.com/python/cpython/releases) and copy the link to the compressed archive __*tar.gz*__ Python 3.8+ (3.9)
 
-![](https://github.com/IG-88a-lex/Images/blob/master/cpython_tar.gz.png)
+![](https://github.com/IG-88Alex/Image_repo/blob/master/tar-gz_cpython.png)
 
  #### 2.3. Go to the  __*/opt*__  section and download the compressed archive  __*tar.gz*__  using  __*wget*__:
 ![](https://github.com/IG-88a-lex/Images/blob/master/wget0.png)
@@ -194,7 +194,7 @@ __It's simple! Enter the `map` or `sitemap` command and the bomber interface wil
 
 <h2><i>📝 License.</i></h2>
 
-__The project is distributed under the [MIT License](https://github.com/IG-88a-lex/Site_Map_Generator/blob/main/LICENSE) . By downloading the software from this repository, you agree to it. Under the terms of the license, you must upload the source code of your modifications under the same license.__
+__The project is distributed under the [MIT License](https://github.com/IG-88Alex/Site_Map_Generator/blob/main/LICENSE) . By downloading the software from this repository, you agree to it. Under the terms of the license, you must upload the source code of your modifications under the same license.__
 
 
 <br> </br>
