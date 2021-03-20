@@ -72,7 +72,7 @@
 
 			   - (in cmd enter)         python3 setup.py install
 			   
-[Demo video](https://youtu.be/kwU92z1rUrA)
+[Demo video]()
 
 
 <br> </br>
