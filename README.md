@@ -18,9 +18,11 @@
 
 <h2><i>🐍Installation.</i></h2>
 
-### __Instalation Python 3.9 (3.8) 🐍__
+<br> </br>
 
 <h3 align = "left"> 🗗 For Windows:</h3>
+
+### __Instalation Python 3.9 (3.8) 🐍__
 
 * ### If your Windows distribution doesn't have python installed since version 3.8 (3.9), go to the official website, download the latest version of python, and install it on your computer. ⬇
 
