@@ -38,7 +38,7 @@
 
 	* _Press the key combination <b>Win+r</b>, enter <b>cmd</b>, <b>enter in cmd</b>:_
 
-	                    pip3 install git+https://github.com/IG-88Alex/Site_Map_Generator
+	            pip3 install git+https://github.com/IG-88Alex/Site_Map_Generator
 
 	* Example:
 
