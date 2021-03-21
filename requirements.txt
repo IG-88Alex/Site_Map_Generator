@@ -4,7 +4,7 @@ asyncio
 aiofile
 aiofiles
 bs4
-beautifulsoup4
+tldextract
 networkx
 numpy
 matplotlib
