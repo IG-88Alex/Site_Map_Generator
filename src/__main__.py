@@ -7,7 +7,19 @@ import sys, os
 
 from pathlib import Path
 import importlib.util
-from Importing import Import
+
+path_module=str(Path(__file__).parent)+'/Importing.py'
+
+module_spec = importlib.util.spec_from_file_location(
+			        
+			        'Importing', path_module
+			    )
+
+obj_module = importlib.util.module_from_spec(module_spec)
+
+module_spec.loader.exec_module(obj_module)
+
+Import=obj_module.Import
 
 '''
 The @Import decorator allows you to pass a 
