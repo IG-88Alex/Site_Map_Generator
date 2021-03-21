@@ -16,7 +16,7 @@
 
 <p align= "center"> Open and free site map generator 🕸️</p>
 
-<h2><i>🐍Installation.</i></h2>
+<h2 align="center"><i>🐍Installation.</i></h2>
 
 <br> </br>
 
