@@ -116,7 +116,7 @@ sudo apt install wget
 ![](https://github.com/IG-88Alex/Image_repo/blob/master/tar-gz_cpython.png)
 
  #### 2.3. Go to the  __*/opt*__  section and download the compressed archive  __*tar.gz*__  using  __*wget*__:
-![](https://github.com/IG-88a-lex/Images/blob/master/wget0.png)
+![](https://github.com/IG-88Alex/Image_repo/blob/master/wget.png)
 <pre><b>
 cd /opt
 
