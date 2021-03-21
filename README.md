@@ -160,7 +160,7 @@ __It's simple! Enter the `map` or `sitemap` command and the bomber interface wil
 <br> </br>
 
 
-<h2>🔑 Expanded use.</h2>
+<h2 align="center">🔑 Expanded use.</h2>
 
   Commands       |  Destination
 ------------     | -------------
