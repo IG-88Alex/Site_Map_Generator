@@ -8,24 +8,26 @@ import sys, os
 from pathlib import Path
 import importlib.util
 
-path_module=str(Path(__file__).parent)+'/Importing.py'
 
-module_spec = importlib.util.spec_from_file_location(
-			        
-			        'Importing', path_module
-			    )
+def Import():
 
-obj_module = importlib.util.module_from_spec(module_spec)
+	path_module=str(Path(__file__).parent)+'/Importing.py'
 
-module_spec.loader.exec_module(obj_module)
+	module_spec = importlib.util.spec_from_file_location(
+				        
+				        'Importing', path_module
+				    )
 
-Import=obj_module.Import
+	obj_module = importlib.util.module_from_spec(module_spec)
 
-'''
-The @Import decorator allows you to pass a 
-dictionary with modules to the "modules" parameter 
-of the "def main(modules)" function'''
-@Import
+	module_spec.loader.exec_module(obj_module)
+
+	Import=obj_module.Import
+
+	Dict_Import=Import()
+
+	return Dict_Import
+
 def main(modules):
 
 	warnings.filterwarnings("ignore", category=RuntimeWarning)
