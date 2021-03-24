@@ -4,28 +4,32 @@ from pathlib import Path
 import importlib.util	
 
 
-def Import():
+def Import(Main_Program):
 
-	modules_dict={key:importlib.util.spec_from_file_location(
+	#Wrapper-function, import decorator.
+	def imported():
 
-	key, str(Path(__file__).parent)+'/Modules/'+key+'.py'
+		modules_dict={key:importlib.util.spec_from_file_location(
+
+		key, str(Path(__file__).parent)+'/Modules/'+key+'.py'
 
 		) for key in 
 
-	['Search','Graph','Input','Results','Welcome']
+		['Search','Graph','Input','Results','Welcome']
 
-	}# ['Module_1','Module_2','Module_3'] : list name main modules
+		}
 
+		for key in modules_dict:
+			module=importlib.util.module_from_spec(modules_dict[key])
+			spec=modules_dict[key]
+			spec.loader.exec_module(module)
+			modules_dict[key]=module
+		
+		return modules_dict
 
-	for key in modules_dict:
+	'''
+	→  Main wrappable function.
+	Calling the main branch of the program. ←'''
+	Main_Program(imported())
 
-		for_activate=importlib.util.module_from_spec(modules_dict[key])
-
-		spec=modules_dict[key]
-
-		spec.loader.exec_module(for_activate)
-
-		modules_dict[key]=for_activate
-
-
-	return modules_dict
+	return imported
