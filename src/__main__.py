@@ -78,7 +78,6 @@ def main():
 					await i
 				
 		try:
-		
 			et=ElapsedTimer()
 			et.start()
 			loop_2=asyncio.get_event_loop()
@@ -113,7 +112,6 @@ def main():
 
 		except aiohttp.client_exceptions.ClientConnectorError as aio_error:
 			print(f'\n\033[38;5;196m{aio_error}\033[0m')
-
 
 		except SystemExit:
 			sys.exit(0)
