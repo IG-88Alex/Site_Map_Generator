@@ -79,10 +79,12 @@ def main():
 				
 		try:
 			et=ElapsedTimer()
+			
 			et.start()
 			loop_2=asyncio.get_event_loop()
 			loop_2.run_until_complete(run_coroutines())
 			et.stop()
+
 			obj1.Create_Sitemap()
 			obj1.Map.Site_map_close()
 			counter=obj1.get_counter()
