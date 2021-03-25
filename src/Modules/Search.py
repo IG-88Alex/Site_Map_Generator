@@ -16,34 +16,21 @@ import os, sys, requests,  re , time, queue
 from urllib.parse import unquote, unquote_plus
 
 
-
-
-
 class Search:
-
-
-	path_module_1=str(Path(__file__).parent)+'/Import_Module.py'
 
 	module_spec_1 = importlib.util.spec_from_file_location(
 			        
-			        'Import_Module', path_module_1
-			    )
+		'Import_Module', str(Path(__file__).parent)+'/Import_Module.py'
+	)
 
 	obj_module_1 = importlib.util.module_from_spec(module_spec_1)
-
 	module_spec_1.loader.exec_module(obj_module_1)
-
 	Import=obj_module_1.Import
-
 	modules=Import()
 
-
 	Exist_https=modules['Exist_https'].Exist_https
-
 	Document_ext=modules['Exist_https'].Document_ext
-
 	Get_File_Map=modules['Get_File_Map'].Get_File_Map
-
 	Log_info=modules['Log_info'].Log_info
 
 
@@ -91,7 +78,7 @@ class Search:
 
 			['etag','date','last-modified']
 
-			)
+		)
 
 		'''
 	    The rank of the page will depend 
@@ -105,7 +92,7 @@ class Search:
 	        7:'0.41',8:'0.41',
 	        9:'0.35'
 
-	               }
+	    }
 
 		'''
 	    The dictionary contains lists, 
@@ -117,7 +104,7 @@ class Search:
 			'0.64':[],'0.54':[],
 			'0.41':[],'0.35':[]
 
-					}
+		}
 
 		'''
 		Let's create a site map object and a title, a map header.'''
@@ -129,6 +116,8 @@ class Search:
 	'''
 	The main function of finding new links.'''
 	async def searching_links(self,tupl):
+
+		warnings.filterwarnings("ignore", category=FutureWarning)
 
 		async with aiohttp.ClientSession(headers={'Connection': 'keep-alive'}) as session:
 
@@ -185,11 +174,8 @@ class Search:
 						self.Priority=self.len_pages_rank[int(len(pages))]
 
 					self.Contain_rank[self.Priority].append( (url, self.Last_mod, self.Priority) )
-
 					self.Succes_link.append(url)
-
 					Search.__counter+=1
-
 					Len=len(str(Search.__counter))
 
 					# self.mult - multiplier
@@ -203,9 +189,7 @@ class Search:
 
 				# Checks if the main base link is not in the list.
 				if len(self.Lis_foun_lin) == 1 and self.Lis_foun_lin[0] == (self.Base_URL,'get'):
-
 					self.Contain_rank['1.00'].append( (url, self.Last_mod, '1.00') )
-
 					Search.Log_info(Search.__counter, self.mult, self.Base_URL)
 
 				'''
@@ -223,11 +207,8 @@ class Search:
 						)# self.Succes_doc_link.append((url,Last_mod,Priority))
 
 					if doc and (doc,'head') not in self.Lis_foun_lin:
-
 						Search.__counter+=1
-
 						Len=len( str(Search.__counter) )
-
 						# self.mult - multiplier
 						if Len==1:
 							self.mult=self.mult*1
@@ -237,7 +218,6 @@ class Search:
 
 						self.Lis_foun_lin.append((doc,'head'))
 					
-					
 					'''
 					2.The first condition is to search for a link based on a given pattern. 
 					http(s)://...(.)example.com/.....'''
@@ -246,16 +226,12 @@ class Search:
 					if url and not doc:
 
 						if (url,'get') not in self.Lis_foun_lin:
-
 							self.Lis_foun_lin.append((url,'get'))
 
 
 			elif Search.__counter > 45000:
-
 				self.Create_Sitemap()
-
 				self.Map.Site_map_close()
-
 				sys.exit(0)
 
 
