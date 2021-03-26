@@ -33,28 +33,21 @@ def Exist_https(Base_URL,url):
 	if url and not url.isspace():
 
 		if Base_URL not in url and url[0]=='/':
-			
 			url=Base_URL+url[1:]
 
 			if url[-1]!='/' and '.html' not in url:
-
 				url=url+'/'
 
-
 		if Base_URL in url:
-
 			i=-1
-
 			list_url=list(url)
 
-			for letter in url:
-				
+			for letter in url:				
 				i+=1
 
 				if not letter.isalpha() and not letter.isdigit():
-
+					
 					if letter not in normal_characters:
-						
 						return False
 
 					# normal_characters[:3]= ['/',':','.']
@@ -68,11 +61,9 @@ def Exist_https(Base_URL,url):
 					if i+1!=len(url):
 
 						if letter == url[i+1] and truth and index:
-
 							return False
 
 					if letter==':' and i!=5 and i!=4:
-
 						return False
 
 			if not  re.search(r'/$',url) and \
