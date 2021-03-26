@@ -8,8 +8,8 @@ with open("requirements.txt", encoding="utf-8") as f:
 
 setup(
 
-	author='IG-88A-lex',
-	author_email='@IG_88a_lex (Telegram)',
+	author='IG-88Alex',
+	author_email='@IG_88Alex (Telegram)',
 
     name='Python_Site_Map',
     version="0.0.2",
