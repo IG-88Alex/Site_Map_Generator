@@ -31,7 +31,9 @@
 ![](https://github.com/IG-88Alex/Image_repo/blob/master/add_path.png)
 
 ### __Instalation Visual C++ 0 1 1 0 1 1...__
-* ### If you want to add a python project to the environment variables, use to install setup.py, as well as to call cmd or powershell, you need to install Visual C++.
+* ### If you want to add a python project to the environment variables, use to install setup.py, as well as to call cmd or powershell, you need to install Visual C++ (Visual Studio).
+![](https://github.com/IG-88Alex/Image_repo/blob/master/vs-installer-workloads.png)
+![](https://github.com/IG-88Alex/Image_repo/blob/master/installer.png)
 
 ### __Instalation Site_Map_Generator.__
 
