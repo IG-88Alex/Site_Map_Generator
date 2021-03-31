@@ -5,6 +5,7 @@ import asyncio
 import aiohttp
 import certifi
 import platform
+import warnings
 import urllib.request
 import importlib.util
 import networkx as Nx
